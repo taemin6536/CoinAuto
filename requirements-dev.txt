@@ -1,0 +1,19 @@
+# Include base requirements
+-r requirements.txt
+
+# Additional development tools
+ipython>=8.14.0
+jupyter>=1.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Code quality tools
+bandit>=1.7.0
+safety>=2.3.0
+isort>=5.12.0
+autopep8>=2.0.0
+
+# Documentation
+sphinx>=7.1.0
+sphinx-rtd-theme>=1.3.0

@@ -1,0 +1,209 @@
+# 균형잡힌 트레이딩 설정 템플릿
+# 안정성과 수익성의 균형을 추구하는 투자자를 위한 설정
+
+# 전역 설정
+global:
+  risk_level: "balanced"
+  max_daily_loss: 0.03  # 일일 최대 손실 3%
+  max_portfolio_risk: 0.15  # 포트폴리오 최대 리스크 15%
+
+# API 설정
+api:
+  rate_limit_buffer: 0.85  # 속도 제한의 85% 사용
+  retry_attempts: 4
+  timeout: 20
+
+# 전략 설정
+strategies:
+  # SMA 교차 전략 (균형)
+  sma_balanced:
+    name: "sma_crossover"
+    enabled: true
+    weight: 0.5  # 동등한 가중치
+    
+    parameters:
+      short_period: 10
+      long_period: 30
+      signal_threshold: 0.75  # 중간 수준의 신뢰도
+      
+      buy_signal:
+        confirmation_periods: 2
+        
+      sell_signal:
+        confirmation_periods: 2
+        
+      risk:
+        max_position_size: 0.12  # 포트폴리오의 12%
+        stop_loss: 0.035  # 3.5% 손절매
+        take_profit: 0.08  # 8% 익절
+        
+      markets:
+        - "KRW-BTC"
+        - "KRW-ETH"
+        
+      evaluation_frequency: 300  # 5분마다 평가
+      min_volume_threshold: 1000000
+
+  # RSI 전략 (균형)
+  rsi_balanced:
+    name: "rsi_momentum"
+    enabled: true
+    weight: 0.5
+    
+    parameters:
+      rsi_period: 14  # 표준 RSI 기간
+      oversold_threshold: 30
+      overbought_threshold: 70
+      signal_threshold: 0.75
+      
+      buy_signal:
+        additional_filters:
+          - "volume > avg_volume * 1.3"
+          - "price_change > -0.025"
+          
+      sell_signal:
+        additional_filters:
+          - "volume > avg_volume * 1.1"
+      
+      risk:
+        max_position_size: 0.1
+        stop_loss: 0.04
+        take_profit: 0.1
+        trailing_stop: true
+        trailing_stop_percentage: 0.02
+        
+      markets:
+        - "KRW-BTC"
+        - "KRW-ETH"
+        - "KRW-ADA"
+        
+      evaluation_frequency: 180  # 3분마다 평가
+      
+      indicators:
+        volume_sma_period: 20
+        price_sma_period: 50
+
+# 리스크 관리 (균형)
+risk_management:
+  global_stop_loss: 0.2   # 전체 포트폴리오 20% 손실 시 중단
+  daily_loss_limit: 0.03  # 일일 3% 손실 제한
+  max_open_positions: 4   # 최대 4개 포지션
+  position_correlation_limit: 0.75  # 상관관계 75% 이하 허용
+  
+  # 동적 리스크 조정
+  dynamic_risk_adjustment:
+    enabled: true
+    volatility_threshold: 0.05  # 5% 변동성 기준
+    
+    low_volatility:
+      position_size_multiplier: 1.2  # 포지션 크기 20% 증가
+      signal_threshold_reduction: 0.05  # 신뢰도 요구 완화
+    
+    high_volatility:
+      position_size_multiplier: 0.8  # 포지션 크기 20% 감소
+      signal_threshold_boost: 0.1  # 신뢰도 요구 강화
+  
+  # 시장 조건별 조정
+  market_conditions:
+    bear_market:
+      max_position_size: 0.08  # 하락장에서 포지션 축소
+      cash_reserve_boost: 0.1  # 현금 보유 증가
+    
+    sideways_market:
+      evaluation_frequency_multiplier: 1.5  # 평가 빈도 감소
+      signal_threshold_boost: 0.05
+
+# 포트폴리오 관리
+portfolio:
+  rebalancing_frequency: "weekly"  # 주간 리밸런싱
+  cash_reserve_ratio: 0.15  # 15% 현금 보유
+  max_single_asset_weight: 0.35  # 단일 자산 최대 35%
+  
+  # 분산 투자
+  diversification:
+    min_assets: 2  # 최소 2개 자산
+    max_assets: 5  # 최대 5개 자산
+    correlation_check: true
+    
+  # 성과 기반 조정
+  performance_based_adjustment:
+    enabled: true
+    review_period: "monthly"
+    underperforming_threshold: -0.05  # -5% 성과 시 조정
+    outperforming_threshold: 0.1   # 10% 성과 시 포지션 확대
+
+# 전략 최적화
+strategy_optimization:
+  enabled: true
+  optimization_frequency: "monthly"
+  
+  # 백테스팅 기반 최적화
+  backtesting:
+    lookback_period: "60d"  # 60일 백테스팅
+    optimization_metrics:
+      - "sharpe_ratio"
+      - "max_drawdown"
+      - "win_rate"
+    
+  # A/B 테스팅
+  ab_testing:
+    enabled: false  # 선택적 활성화
+    test_duration: "14d"
+    significance_threshold: 0.05
+
+# 모니터링 및 알림
+monitoring:
+  performance_check_frequency: "daily"
+  
+  # 다층 알림 시스템
+  alert_levels:
+    info:
+      - "daily_return > 0.02"  # 일일 2% 수익 시
+      - "new_signal_generated"
+    
+    warning:
+      - "daily_loss > 0.02"  # 일일 2% 손실 시
+      - "portfolio_drawdown > 0.08"  # 8% 하락 시
+      - "strategy_failure_rate > 0.25"
+    
+    critical:
+      - "daily_loss > 0.025"  # 일일 2.5% 손실 시
+      - "portfolio_drawdown > 0.12"  # 12% 하락 시
+      - "system_error"
+  
+  notification_channels:
+    - "email"
+    - "log"
+
+# 리포팅
+reporting:
+  daily_report: true
+  weekly_summary: true
+  monthly_analysis: true
+  
+  metrics_to_track:
+    - "total_return"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "win_rate"
+    - "average_trade_duration"
+    - "profit_factor"
+
+# 로깅
+logging:
+  level: "INFO"
+  detailed_trade_logs: true
+  performance_metrics: true
+  risk_metrics: true
+  strategy_analysis: true
+  
+  # 로그 순환
+  rotation:
+    max_file_size: "10MB"
+    backup_count: 7
+    
+# 보안 설정
+security:
+  api_key_encryption: true
+  secure_config_storage: true
+  audit_logging: true

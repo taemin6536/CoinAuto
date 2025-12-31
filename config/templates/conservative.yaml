@@ -1,0 +1,104 @@
+# 보수적 트레이딩 설정 템플릿
+# 안전성을 중시하는 투자자를 위한 설정
+
+# 전역 설정
+global:
+  risk_level: "conservative"
+  max_daily_loss: 0.02  # 일일 최대 손실 2%
+  max_portfolio_risk: 0.1  # 포트폴리오 최대 리스크 10%
+
+# API 설정
+api:
+  rate_limit_buffer: 0.8  # 속도 제한의 80%만 사용
+  retry_attempts: 5
+  timeout: 30
+
+# 전략 설정
+strategies:
+  # SMA 교차 전략 (보수적)
+  sma_conservative:
+    name: "sma_crossover"
+    enabled: true
+    weight: 0.6  # 전체 신호의 60% 가중치
+    
+    parameters:
+      short_period: 20
+      long_period: 50
+      signal_threshold: 0.9  # 높은 신뢰도 요구
+      
+      buy_signal:
+        confirmation_periods: 3  # 3번 확인 후 매수
+        
+      sell_signal:
+        confirmation_periods: 2
+        
+      risk:
+        max_position_size: 0.08  # 포트폴리오의 8%
+        stop_loss: 0.02  # 2% 손절매
+        take_profit: 0.04  # 4% 익절
+        
+      markets:
+        - "KRW-BTC"  # 비트코인만 거래
+        
+      evaluation_frequency: 600  # 10분마다 평가
+      min_volume_threshold: 2000000  # 높은 거래량 요구
+
+  # RSI 전략 (비활성화 - 보수적 접근)
+  rsi_conservative:
+    name: "rsi_momentum"
+    enabled: false  # 보수적 설정에서는 비활성화
+    weight: 0.4
+    
+    parameters:
+      rsi_period: 21  # 긴 기간으로 안정성 확보
+      oversold_threshold: 25  # 더 극단적인 조건
+      overbought_threshold: 75
+      signal_threshold: 0.85
+      
+      risk:
+        max_position_size: 0.05
+        stop_loss: 0.025
+        take_profit: 0.05
+        trailing_stop: true
+        trailing_stop_percentage: 0.015
+
+# 리스크 관리
+risk_management:
+  global_stop_loss: 0.15  # 전체 포트폴리오 15% 손실 시 중단
+  daily_loss_limit: 0.02  # 일일 2% 손실 제한
+  max_open_positions: 2   # 최대 2개 포지션
+  position_correlation_limit: 0.7  # 상관관계 70% 이하만 허용
+  
+  # 시장 조건별 제한
+  market_conditions:
+    high_volatility:
+      max_position_size: 0.05  # 변동성 높을 때 포지션 축소
+      signal_threshold_boost: 0.1  # 신뢰도 요구 상향
+    
+    low_volume:
+      min_volume_multiplier: 2.0  # 평소 2배 거래량 요구
+
+# 포트폴리오 관리
+portfolio:
+  rebalancing_frequency: "weekly"  # 주간 리밸런싱
+  cash_reserve_ratio: 0.2  # 20% 현금 보유
+  max_single_asset_weight: 0.3  # 단일 자산 최대 30%
+
+# 모니터링 및 알림
+monitoring:
+  performance_check_frequency: "daily"
+  alert_conditions:
+    - "daily_loss > 0.015"  # 일일 1.5% 손실 시 알림
+    - "portfolio_drawdown > 0.1"  # 10% 하락 시 알림
+    - "strategy_failure_rate > 0.3"  # 전략 실패율 30% 초과 시
+  
+  notification_channels:
+    - "email"
+    - "log"
+
+# 로깅
+logging:
+  level: "INFO"
+  detailed_trade_logs: true
+  performance_metrics: true
+  risk_metrics: true

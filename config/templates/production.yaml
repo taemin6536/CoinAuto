@@ -1,0 +1,80 @@
+# Production Trading Bot Configuration Template
+# This template provides production-ready configuration with comprehensive settings
+
+# API Configuration
+api:
+  base_url: "https://api.upbit.com"
+  websocket_url: "wss://api.upbit.com/websocket/v1"
+  timeout: 30
+  max_retries: 5
+  retry_delay: 2.0
+
+# Trading Configuration
+trading:
+  enabled: true
+  default_market: "KRW-BTC"
+  order_type: "limit"
+  min_order_amount: 10000  # Higher minimum for production
+  max_position_size: 0.03  # Conservative 3% of portfolio
+
+# Risk Management - Conservative settings for production
+risk:
+  stop_loss_percentage: 0.02  # 2% stop loss
+  daily_loss_limit: 0.005  # 0.5% daily loss limit
+  max_daily_trades: 20
+  min_balance_threshold: 100000  # KRW
+  position_size_limit: 0.05  # 5% per position
+
+# Strategy Configuration
+strategies:
+  enabled: ["sma_crossover"]  # Start with one proven strategy
+  evaluation_interval: 180  # 3 minutes
+  signal_threshold: 0.85  # High confidence required
+
+# Data Configuration
+data:
+  price_history_days: 60  # More history for production
+  update_interval: 1
+  websocket_reconnect_delay: 3
+
+# Database Configuration
+database:
+  url: "sqlite:///production_trading_bot.db"
+  echo: false
+  pool_size: 10
+  max_overflow: 20
+
+# Logging Configuration - Comprehensive logging for production
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/production_trading_bot.log"
+  max_file_size: "50MB"
+  backup_count: 10
+  rotation: "daily"
+
+# Monitoring Configuration - Enable all monitoring
+monitoring:
+  enabled: true
+  health_check_port: 8080
+  metrics_port: 8081
+
+# Notification Configuration - Enable alerts for production
+notifications:
+  enabled: true
+  channels: ["telegram"]  # Configure your preferred channels
+  
+  telegram:
+    bot_token: "${TELEGRAM_BOT_TOKEN}"  # Use environment variables
+    chat_id: "${TELEGRAM_CHAT_ID}"
+    
+  slack:
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+    
+  email:
+    smtp_server: "${SMTP_SERVER}"
+    smtp_port: 587
+    username: "${SMTP_USERNAME}"
+    password: "${SMTP_PASSWORD}"
+    from_email: "${FROM_EMAIL}"
+    to_emails: ["${ALERT_EMAIL}"]

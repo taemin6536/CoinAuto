@@ -1,0 +1,24 @@
+{
+  "channels": [
+    {
+      "name": "console",
+      "type": "console",
+      "config": {},
+      "enabled": true,
+      "min_level": "warning"
+    },
+    {
+      "name": "file",
+      "type": "file",
+      "config": {
+        "file_path": "logs/alerts.log"
+      },
+      "enabled": true,
+      "min_level": "info"
+    }
+  ],
+  "rate_limits": {
+    "max_per_hour": 20,
+    "max_per_day": 100
+  }
+}

@@ -1,0 +1,47 @@
+# 안전한 테스트용 RSI 전략 설정
+
+strategy:
+  name: "rsi_momentum"
+  description: "Safe RSI Strategy for Testing with 50k KRW"
+  enabled: true
+  
+parameters:
+  rsi_period: 14
+  oversold_threshold: 25  # 더 보수적 (25 이하에서만 매수)
+  overbought_threshold: 75  # 더 보수적 (75 이상에서만 매도)
+  signal_threshold: 0.85  # 매우 높은 신뢰도만
+  
+  # Entry conditions - 매우 보수적
+  buy_signal:
+    condition: "rsi < oversold_threshold"
+    additional_filters:
+      - "volume > avg_volume * 2.0"  # 거래량 2배 이상
+      - "price_change > -0.01"  # 1% 이상 급락하지 않은 경우만
+      
+  sell_signal:
+    condition: "rsi > overbought_threshold"
+    additional_filters:
+      - "volume > avg_volume * 1.5"
+      - "profit > 0.015"  # 최소 1.5% 수익 이상에서만 매도
+      
+  # 매우 보수적인 리스크 관리
+  risk:
+    max_position_size: 0.25  # 25% (약 12,500원)
+    stop_loss: 0.015  # 1.5% 손절매
+    take_profit: 0.03  # 3% 익절
+    trailing_stop: true
+    trailing_stop_percentage: 0.01  # 1%
+    
+  # 안전한 코인만 선택
+  markets:
+    - "KRW-DOGE"  # 도지코인 - 변동성 적음
+    - "KRW-XRP"   # 리플 - 상대적으로 안정적
+    
+  # 더 신중한 타이밍
+  evaluation_frequency: 600  # 10분마다 평가
+  min_volume_threshold: 1000000  # 100만원 이상 거래량
+  
+  # Technical indicators
+  indicators:
+    volume_sma_period: 30  # 더 긴 기간
+    price_sma_period: 100  # 더 긴 기간으로 안정성 확보

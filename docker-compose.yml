@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  upbit-bot:
+    build: .
+    container_name: upbit-trading-bot
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+      - ./data:/app/data
+    environment:
+      - UPBIT_ACCESS_KEY=${UPBIT_ACCESS_KEY}
+      - UPBIT_SECRET_KEY=${UPBIT_SECRET_KEY}
+      - TRADING_ENABLED=${TRADING_ENABLED:-false}
+    ports:
+      - "8080:8080"  # 모니터링 포트
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 선택사항: 데이터베이스 (PostgreSQL)
+  # postgres:
+  #   image: postgres:15
+  #   container_name: upbit-bot-db
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: trading_bot
+  #     POSTGRES_USER: bot_user
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+volumes:
+  postgres_data:

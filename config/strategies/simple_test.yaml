@@ -1,0 +1,27 @@
+# 간단한 테스트 전략 설정
+
+strategy:
+  name: "simple_test"
+  description: "Simple Test Strategy for Real Trading"
+  enabled: true
+  
+parameters:
+  buy_threshold: -0.005  # 0.5% 하락 시 매수 (더 공격적)
+  sell_threshold: 0.005  # 0.5% 상승 시 매도 (더 공격적)
+  min_price_history: 3   # 최소 3개 가격 데이터로 빠른 반응
+  
+  # 공격적인 거래를 위한 설정
+  risk:
+    max_position_size: 0.3  # 30% (약 15,000원)
+    stop_loss: 0.02  # 2% 손절매
+    take_profit: 0.01  # 1% 익절
+    
+  # 거래할 마켓 (변동성 높은 코인들)
+  markets:
+    - "KRW-DOGE"  # 도지코인
+    - "KRW-SHIB"  # 시바이누
+    - "KRW-XRP"   # 리플
+    
+  # 타이밍 (더 빠른 반응)
+  evaluation_frequency: 10  # 10초마다 평가
+  min_volume_threshold: 50000  # 5만원 이상 거래량

@@ -1,0 +1,164 @@
+# 적극적 트레이딩 설정 템플릿
+# 높은 수익을 추구하는 투자자를 위한 설정
+
+# 전역 설정
+global:
+  risk_level: "aggressive"
+  max_daily_loss: 0.05  # 일일 최대 손실 5%
+  max_portfolio_risk: 0.25  # 포트폴리오 최대 리스크 25%
+
+# API 설정
+api:
+  rate_limit_buffer: 0.95  # 속도 제한의 95% 사용
+  retry_attempts: 3
+  timeout: 15
+
+# 전략 설정
+strategies:
+  # SMA 교차 전략 (적극적)
+  sma_aggressive:
+    name: "sma_crossover"
+    enabled: true
+    weight: 0.4
+    
+    parameters:
+      short_period: 5   # 짧은 기간으로 빠른 반응
+      long_period: 15
+      signal_threshold: 0.65  # 낮은 신뢰도로 더 많은 기회
+      
+      buy_signal:
+        confirmation_periods: 1  # 즉시 매수
+        
+      sell_signal:
+        confirmation_periods: 1
+        
+      risk:
+        max_position_size: 0.2  # 포트폴리오의 20%
+        stop_loss: 0.05  # 5% 손절매
+        take_profit: 0.12  # 12% 익절
+        
+      markets:
+        - "KRW-BTC"
+        - "KRW-ETH"
+        - "KRW-ADA"
+        - "KRW-DOT"
+        
+      evaluation_frequency: 60  # 1분마다 평가
+      min_volume_threshold: 500000
+
+  # RSI 전략 (적극적)
+  rsi_aggressive:
+    name: "rsi_momentum"
+    enabled: true
+    weight: 0.6  # RSI에 더 높은 가중치
+    
+    parameters:
+      rsi_period: 10  # 짧은 기간으로 민감한 반응
+      oversold_threshold: 35  # 덜 극단적인 조건
+      overbought_threshold: 65
+      signal_threshold: 0.6
+      
+      buy_signal:
+        additional_filters:
+          - "volume > avg_volume * 1.2"  # 낮은 거래량 조건
+          - "price_change > -0.03"  # 3% 하락까지 허용
+          
+      sell_signal:
+        additional_filters:
+          - "volume > avg_volume * 1.0"  # 평균 거래량만 요구
+      
+      risk:
+        max_position_size: 0.15
+        stop_loss: 0.06
+        take_profit: 0.15
+        trailing_stop: true
+        trailing_stop_percentage: 0.03
+        
+      markets:
+        - "KRW-BTC"
+        - "KRW-ETH"
+        - "KRW-ADA"
+        - "KRW-DOT"
+        - "KRW-LINK"
+        - "KRW-XRP"
+        
+      evaluation_frequency: 120  # 2분마다 평가
+      
+      indicators:
+        volume_sma_period: 10  # 짧은 기간
+        price_sma_period: 20
+
+# 리스크 관리 (적극적)
+risk_management:
+  global_stop_loss: 0.25  # 전체 포트폴리오 25% 손실 시 중단
+  daily_loss_limit: 0.05  # 일일 5% 손실 제한
+  max_open_positions: 6   # 최대 6개 포지션
+  position_correlation_limit: 0.8  # 상관관계 80% 이하 허용
+  
+  # 시장 조건별 조정
+  market_conditions:
+    high_volatility:
+      max_position_size: 0.12  # 변동성 높을 때도 큰 포지션 유지
+      signal_threshold_boost: 0.05  # 약간의 신뢰도 상향
+    
+    low_volume:
+      min_volume_multiplier: 1.2  # 평소 1.2배 거래량만 요구
+      
+    bull_market:
+      max_position_size: 0.25  # 상승장에서 포지션 확대
+      take_profit_multiplier: 1.5  # 익절 목표 상향
+
+# 포트폴리오 관리
+portfolio:
+  rebalancing_frequency: "daily"  # 일일 리밸런싱
+  cash_reserve_ratio: 0.05  # 5% 현금 보유 (적극 투자)
+  max_single_asset_weight: 0.4  # 단일 자산 최대 40%
+  
+  # 레버리지 (주의: 높은 리스크)
+  leverage:
+    enabled: false  # 기본적으로 비활성화
+    max_leverage: 2.0  # 최대 2배 레버리지
+    margin_call_threshold: 0.8
+
+# 고급 전략 설정
+advanced_strategies:
+  # 그리드 트레이딩
+  grid_trading:
+    enabled: false  # 선택적 활성화
+    grid_size: 0.02  # 2% 간격
+    grid_levels: 10
+    
+  # 스캘핑
+  scalping:
+    enabled: false
+    min_profit_target: 0.005  # 0.5% 최소 수익
+    max_hold_time: 300  # 5분 최대 보유
+
+# 모니터링 및 알림
+monitoring:
+  performance_check_frequency: "hourly"  # 시간별 체크
+  alert_conditions:
+    - "daily_loss > 0.03"  # 일일 3% 손실 시 알림
+    - "portfolio_drawdown > 0.15"  # 15% 하락 시 알림
+    - "strategy_failure_rate > 0.4"  # 전략 실패율 40% 초과 시
+    - "high_volatility_detected"  # 높은 변동성 감지 시
+  
+  notification_channels:
+    - "email"
+    - "slack"  # 빠른 알림을 위한 슬랙
+    - "log"
+
+# 백테스팅 설정
+backtesting:
+  enabled: true
+  lookback_period: "30d"  # 30일 백테스팅
+  rebalance_on_poor_performance: true
+  performance_threshold: -0.1  # -10% 성과 시 전략 조정
+
+# 로깅
+logging:
+  level: "DEBUG"  # 상세한 로깅
+  detailed_trade_logs: true
+  performance_metrics: true
+  risk_metrics: true
+  market_analysis: true

@@ -1,0 +1,52 @@
+# Minimal Trading Bot Configuration Template
+# This template provides the bare minimum configuration needed to run the bot
+
+# API Configuration - REQUIRED
+api:
+  base_url: "https://api.upbit.com"
+  websocket_url: "wss://api.upbit.com/websocket/v1"
+  timeout: 30
+  max_retries: 3
+  retry_delay: 1.0
+
+# Trading Configuration - REQUIRED
+trading:
+  enabled: false  # Set to true when ready to trade
+  default_market: "KRW-BTC"
+  order_type: "limit"
+  min_order_amount: 5000
+  max_position_size: 0.05  # 5% of portfolio
+
+# Risk Management - REQUIRED
+risk:
+  stop_loss_percentage: 0.03  # 3%
+  daily_loss_limit: 0.01  # 1%
+  max_daily_trades: 10
+  min_balance_threshold: 50000  # KRW
+  position_size_limit: 0.1  # 10% per position
+
+# Strategy Configuration - REQUIRED
+strategies:
+  enabled: []  # Add strategy names here
+  evaluation_interval: 300  # 5 minutes
+  signal_threshold: 0.8  # High confidence required
+
+# Database Configuration
+database:
+  url: "sqlite:///trading_bot.db"
+  echo: false
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  file: "logs/trading_bot.log"
+
+# Monitoring Configuration
+monitoring:
+  enabled: false
+  health_check_port: 8080
+
+# Notifications Configuration
+notifications:
+  enabled: false
+  channels: []

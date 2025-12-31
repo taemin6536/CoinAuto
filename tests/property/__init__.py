@@ -1,0 +1,1 @@
+"""Property-based tests for Upbit Trading Bot."""

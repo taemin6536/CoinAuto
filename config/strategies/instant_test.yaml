@@ -1,0 +1,14 @@
+# 즉시 테스트 전략 설정
+strategy:
+  name: instant_test
+  enabled: true
+  description: "즉시 매매 테스트 전략 - 수익률 기반 매도"
+
+# 전략 파라미터
+parameters:
+  profit_threshold: 0.5  # 0.5% 수익률에서 매도 (빠른 테스트를 위해)
+  
+# 리스크 관리
+risk:
+  max_position_size: 1000  # 최대 1,000원 포지션
+  stop_loss: -2.0  # -2% 손절매 (현재는 사용하지 않음)

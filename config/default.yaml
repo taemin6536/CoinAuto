@@ -1,0 +1,80 @@
+# Default Trading Bot Configuration
+# This file contains default settings for the Upbit Trading Bot
+
+# API Configuration
+api:
+  base_url: "https://api.upbit.com"
+  websocket_url: "wss://api.upbit.com/websocket/v1"
+  timeout: 30
+  max_retries: 3
+  retry_delay: 1.0
+
+# Trading Configuration
+trading:
+  enabled: true
+  default_market: "KRW-DOGE"  # 도지코인으로 변경
+  order_type: "market"  # 시장가로 빠른 체결
+  min_order_amount: 5000  # KRW
+  max_position_size: 0.3  # 30% of portfolio
+  
+# Risk Management
+risk:
+  stop_loss_percentage: 0.05  # 5%
+  daily_loss_limit: 0.02  # 2%
+  max_daily_trades: 50
+  min_balance_threshold: 10000  # KRW
+  position_size_limit: 0.2  # 20% per position
+
+# Strategy Configuration
+strategies:
+  enabled: ["instant_test"]  # 즉시 테스트 전략 활성화
+  evaluation_interval: 5  # 5초마다 평가
+  signal_threshold: 0.5  # 낮은 신뢰도도 허용
+
+# Data Configuration
+data:
+  price_history_days: 30
+  update_interval: 1  # seconds
+  websocket_reconnect_delay: 5
+
+# Database Configuration
+database:
+  url: "sqlite:///trading_bot.db"
+  echo: false
+  pool_size: 5
+  max_overflow: 10
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/trading_bot.log"
+  max_file_size: "10MB"
+  backup_count: 5
+  rotation: "daily"
+
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  health_check_port: 8080
+  metrics_port: 8081
+  
+# Notification Configuration
+notifications:
+  enabled: false
+  channels: []  # telegram, slack, email
+  
+  telegram:
+    bot_token: ""
+    chat_id: ""
+    
+  slack:
+    webhook_url: ""
+    
+  email:
+    smtp_server: ""
+    smtp_port: 587
+    username: ""
+    password: ""
+    from_email: ""
+    to_emails: []

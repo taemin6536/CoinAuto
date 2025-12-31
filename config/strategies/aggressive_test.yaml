@@ -1,0 +1,28 @@
+# 공격적인 테스트 전략 설정
+
+strategy:
+  name: "aggressive_test"
+  description: "Aggressive Test Strategy for Fast Trading"
+  enabled: true
+  
+parameters:
+  buy_threshold: -0.001  # 0.1% 하락 시 매수 (매우 공격적)
+  sell_threshold: 0.001  # 0.1% 상승 시 매도 (매우 공격적)
+  min_price_history: 2   # 최소 2개 가격 데이터로 즉시 반응
+  
+  # 공격적인 거래를 위한 설정
+  risk:
+    max_position_size: 0.4  # 40% (약 20,000원)
+    stop_loss: 0.02  # 2% 손절매
+    take_profit: 0.003  # 0.3% 익절
+    
+  # 거래할 마켓 (변동성 높은 코인들)
+  markets:
+    - "KRW-DOGE"  # 도지코인
+    - "KRW-SHIB"  # 시바이누
+    - "KRW-XRP"   # 리플
+    - "KRW-ADA"   # 에이다
+    
+  # 타이밍 (매우 빠른 반응)
+  evaluation_frequency: 2  # 2초마다 평가
+  min_volume_threshold: 20000  # 2만원 이상 거래량

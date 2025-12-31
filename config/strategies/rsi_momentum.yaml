@@ -1,0 +1,47 @@
+# RSI Momentum Strategy Configuration
+
+strategy:
+  name: "rsi_momentum"
+  description: "RSI-based Momentum Trading Strategy"
+  enabled: false  # Disabled by default
+  
+parameters:
+  rsi_period: 14  # RSI calculation period
+  oversold_threshold: 30  # RSI level for oversold condition
+  overbought_threshold: 70  # RSI level for overbought condition
+  signal_threshold: 0.75
+  
+  # Entry conditions
+  buy_signal:
+    condition: "rsi < oversold_threshold"
+    additional_filters:
+      - "volume > avg_volume * 1.5"  # High volume confirmation
+      - "price_change > -0.02"  # Not falling too fast
+      
+  sell_signal:
+    condition: "rsi > overbought_threshold"
+    additional_filters:
+      - "volume > avg_volume * 1.2"
+      
+  # Risk management
+  risk:
+    max_position_size: 0.1  # 10% of portfolio
+    stop_loss: 0.04  # 4% stop loss
+    take_profit: 0.08  # 8% take profit
+    trailing_stop: true
+    trailing_stop_percentage: 0.02  # 2%
+    
+  # Market conditions
+  markets:
+    - "KRW-BTC"
+    - "KRW-ETH"
+    - "KRW-ADA"
+    
+  # Timing
+  evaluation_frequency: 180  # seconds (3 minutes)
+  min_volume_threshold: 500000  # KRW
+  
+  # Technical indicators
+  indicators:
+    volume_sma_period: 20
+    price_sma_period: 50

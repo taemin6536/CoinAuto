@@ -1,0 +1,35 @@
+# Simple Moving Average Crossover Strategy Configuration
+
+strategy:
+  name: "sma_crossover"
+  description: "Simple Moving Average Crossover Strategy"
+  enabled: true
+  
+parameters:
+  short_period: 10  # Short-term SMA period
+  long_period: 30   # Long-term SMA period
+  signal_threshold: 0.8  # Minimum confidence for signals
+  
+  # Entry conditions
+  buy_signal:
+    condition: "short_sma > long_sma"
+    confirmation_periods: 2  # Wait for N periods of confirmation
+    
+  sell_signal:
+    condition: "short_sma < long_sma"
+    confirmation_periods: 2
+    
+  # Risk management for this strategy
+  risk:
+    max_position_size: 0.15  # 15% of portfolio
+    stop_loss: 0.03  # 3% stop loss
+    take_profit: 0.06  # 6% take profit
+    
+  # Market conditions
+  markets:
+    - "KRW-BTC"
+    - "KRW-ETH"
+    
+  # Timing
+  evaluation_frequency: 300  # seconds (5 minutes)
+  min_volume_threshold: 1000000  # KRW

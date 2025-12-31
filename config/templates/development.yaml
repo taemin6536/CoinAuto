@@ -1,0 +1,65 @@
+# Development Trading Bot Configuration Template
+# This template is optimized for development and testing
+
+# API Configuration
+api:
+  base_url: "https://api.upbit.com"
+  websocket_url: "wss://api.upbit.com/websocket/v1"
+  timeout: 15  # Shorter timeout for development
+  max_retries: 2
+  retry_delay: 0.5
+
+# Trading Configuration - Safe settings for development
+trading:
+  enabled: false  # Disabled by default for safety
+  default_market: "KRW-BTC"
+  order_type: "limit"
+  min_order_amount: 5000
+  max_position_size: 0.01  # Very small positions for testing
+
+# Risk Management - Very conservative for development
+risk:
+  stop_loss_percentage: 0.01  # 1% stop loss
+  daily_loss_limit: 0.002  # 0.2% daily loss limit
+  max_daily_trades: 5
+  min_balance_threshold: 10000
+  position_size_limit: 0.02  # 2% per position
+
+# Strategy Configuration
+strategies:
+  enabled: []  # No strategies enabled by default
+  evaluation_interval: 60  # 1 minute for faster testing
+  signal_threshold: 0.6  # Lower threshold for testing
+
+# Data Configuration
+data:
+  price_history_days: 7  # Less history for development
+  update_interval: 1
+  websocket_reconnect_delay: 2
+
+# Database Configuration
+database:
+  url: "sqlite:///dev_trading_bot.db"
+  echo: true  # Enable SQL logging for development
+  pool_size: 3
+  max_overflow: 5
+
+# Logging Configuration - Verbose logging for development
+logging:
+  level: "DEBUG"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s"
+  file: "logs/dev_trading_bot.log"
+  max_file_size: "10MB"
+  backup_count: 3
+  rotation: "daily"
+
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  health_check_port: 8080
+  metrics_port: 8081
+
+# Notification Configuration - Disabled for development
+notifications:
+  enabled: false
+  channels: []
